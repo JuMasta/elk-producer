@@ -6,6 +6,7 @@ import requests
 
 
 EXPORTER_URL = os.environ['EXPORTER_URL']
+# EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
@@ -40,7 +41,7 @@ def get_new_errors_and_send_to_exporter():
     es_query_response = es.search(index="*",body=BODY)
     hits = es_query_response['hits']['hits']
     hits_id = list(map(lambda x : x['_id'], hits ))
-    print('hits_id:' + str(hits_id))
+    # print('hits_id:' + str(hits_id))
     for item in hits_id:
         if item not in hits_sended_errors:
             hits_for_sending.append(item)
@@ -51,7 +52,12 @@ def get_new_errors_and_send_to_exporter():
 
 
 def send_metrics_to_exporter(hits_for_sending):
-    requests.post(EXPORTER_URL, json = { "errors" : len(hits_for_sending) } )
+    data_len = len(hits_for_sending)
+    data_json = { "errors" : data_len }
+    print(data_json)
+    print(EXPORTER_URL)
+    requests.post(EXPORTER_URL,json=data_json )
+    # requests.get(EXPORTER_URL)
 
 def update_sended_errors(sended_errors, hits_id):
     for i in hits_id:
@@ -64,4 +70,4 @@ while True:
     except Exception as e:
         print(e)
 
-    time.sleep(120)
+    time.sleep(10)
