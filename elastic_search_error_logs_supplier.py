@@ -5,8 +5,8 @@ import requests
 
 
 
-EXPORTER_URL = os.environ['EXPORTER_URL']
-# EXPORTER_URL = 'http://localhost/metric-reciever'
+# EXPORTER_URL = os.environ['EXPORTER_URL']
+EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
@@ -70,4 +70,4 @@ while True:
     except Exception as e:
         print(e)
 
-    time.sleep(10)
+    time.sleep(120)
