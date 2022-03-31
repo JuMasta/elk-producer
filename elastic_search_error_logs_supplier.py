@@ -5,8 +5,8 @@ import requests
 
 
 
-# EXPORTER_URL = os.environ['EXPORTER_URL']
-EXPORTER_URL = 'http://localhost/metric-reciever'
+EXPORTER_URL = os.environ['EXPORTER_URL']
+# EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
