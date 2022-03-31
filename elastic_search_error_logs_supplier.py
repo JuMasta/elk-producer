@@ -54,10 +54,8 @@ def get_new_errors_and_send_to_exporter():
 def send_metrics_to_exporter(hits_for_sending):
     data_len = len(hits_for_sending)
     data_json = { "errors" : data_len }
-    print(data_json)
-    print(EXPORTER_URL)
+    app.logger.info(data)
     requests.post(EXPORTER_URL,json=data_json )
-    # requests.get(EXPORTER_URL)
 
 def update_sended_errors(sended_errors, hits_id):
     for i in hits_id:
@@ -68,6 +66,6 @@ while True:
     try:
         get_new_errors_and_send_to_exporter()
     except Exception as e:
-        print(e)
+        app.logger.error(data)
 
-    time.sleep(120)
+    time.sleep(10)
