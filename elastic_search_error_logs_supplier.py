@@ -2,11 +2,11 @@ from elasticsearch import Elasticsearch
 import os
 import time
 import requests
-
-
-
-EXPORTER_URL = os.environ['EXPORTER_URL']
-# EXPORTER_URL = 'http://localhost/metric-reciever'
+import logging
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+# EXPORTER_URL = os.environ['EXPORTER_URL']
+EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
@@ -63,7 +63,7 @@ def send_metrics_to_exporter(hits_for_sending):
         namespace_object = data_json['namespace_names'][namespace_name]
         namespace_object[pod_name] = namespace_object.get(pod_name,0) + 1
 
-    print(data_json)
+    log.info(data_json)
     requests.post(EXPORTER_URL,json=data_json)
 
 def update_sended_errors(sended_errors, hits_id):
@@ -75,6 +75,6 @@ while True:
     try:
         get_new_errors_and_send_to_exporter()
     except Exception as e:
-        print(e)
+        log.error(e)
 
     time.sleep(10)
