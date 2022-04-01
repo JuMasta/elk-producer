@@ -5,8 +5,8 @@ import requests
 
 
 
-# EXPORTER_URL = os.environ['EXPORTER_URL']
-EXPORTER_URL = 'http://localhost/metric-reciever'
+EXPORTER_URL = os.environ['EXPORTER_URL']
+# EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
@@ -40,12 +40,11 @@ def get_new_errors_and_send_to_exporter():
     global hits_for_sending
     es_query_response = es.search(index="*",body=BODY)
     hits = es_query_response['hits']['hits']
-    hits_id = list(map(lambda x :  { x['_source']['kubernetes']['pod_name']:x['_id'] }, hits ))
-    # print('hits_id:' + str(hits_id))
+    hits_id = list(map(lambda x :  { '_id':x['_id'], 'namespace_name' : x['_source']['kubernetes']['namespace_name'] , 'pod_name': x['_source']['kubernetes']['pod_name'] }, hits ))
+
     for item in hits_id:
-        for key in item:
-            if item[key] not in hits_sended_errors:
-                hits_for_sending.append(item)
+        if item['_id'] not in hits_sended_errors:
+            hits_for_sending.append(item)
     send_metrics_to_exporter(hits_for_sending)
     hits_sended_errors.clear()
     hits_sended_errors = update_sended_errors(hits_sended_errors,hits_id)
@@ -53,19 +52,23 @@ def get_new_errors_and_send_to_exporter():
 
 
 def send_metrics_to_exporter(hits_for_sending):
-    data_len = len(hits_for_sending)
-    counter = {}
+    data_json = {
+        'namespace_names': {}
+    }
+
     for item in hits_for_sending:
-        for key in item:
-            counter[key] = counter.get(key,0) + 1
-    data_json = counter
+        namespace_name = item['namespace_name']
+        pod_name = item['pod_name']
+        data_json['namespace_names'][namespace_name] = data_json['namespace_names'].get(namespace_name,{})
+        namespace_object = data_json['namespace_names'][namespace_name]
+        namespace_object[pod_name] = namespace_object.get(pod_name,0) + 1
+
     print(data_json)
-    requests.post(EXPORTER_URL,json=data_json )
+    requests.post(EXPORTER_URL,json=data_json)
 
 def update_sended_errors(sended_errors, hits_id):
     for i in hits_id:
-        for key in i:
-            sended_errors.add(i[key])
+        sended_errors.add(i['_id'])
     return  sended_errors
 
 while True:
