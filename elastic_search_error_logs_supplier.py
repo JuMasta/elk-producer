@@ -5,13 +5,13 @@ import requests
 import logging
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-# EXPORTER_URL = os.environ['EXPORTER_URL']
-EXPORTER_URL = 'http://localhost/metric-reciever'
+EXPORTER_URL = os.environ['EXPORTER_URL']
+# EXPORTER_URL = 'http://localhost/metric-reciever'
 
 es = Elasticsearch( hosts=os.environ['ELASTICSEARCH_SCHEME'] + '://' +
                            os.environ['ELASTICSEARCH_HOST'] + ':' +
                            os.environ['ELASTICSEARCH_PORT'],
-                           basic_auth=(os.environ['ELASTICSEARCH_USER'], os.environ['ELASTICSEARCH_PASSWORD']) )
+                           basic_auth=(os.environ['ELASTICSEARCH_USER'], os.environ['ELASTICSEARCH_PASSWORD']), verify_certs=False )
 
 hits_sended_errors = set()
 hits_for_sending = []
