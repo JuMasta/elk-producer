@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENTRYPOINT [ "python", "./start.py" ]
-CMD ["60"]
+CMD ["period","=","60"]
