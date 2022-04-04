@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 args = {}
+log.info(sys.argv)
 if len(sys.argv) > 1:
     for i in range(len(sys.argv)):
         if i != 0:
