@@ -24,7 +24,8 @@ BODY = { "query": {
     "bool": {
       "should" : [
         { "term" : { "level.keyword" : "error" } },
-        { "term" : { "level.keyword" : "warn" } }
+        { "term" : { "level.keyword" : "warn" } },
+        { "term" : { "level.keyword" : "warning" } }
       ],
       "filter": [
         {"range": {
@@ -77,7 +78,7 @@ def update_sended_errors(sended_errors, hits_custom_format):
 def get_new_errors_and_send_to_exporter():
     global hits_sended_errors
     global hits_for_sending
-    es_query_response = es.search(index="*",body=BODY)
+    es_query_response = es.search(index="logstash-*",body=BODY, size=10000)
     hits = es_query_response['hits']['hits']
     hits_custom_format = create_custom_format(hits)
     filter_sended_hits(hits_custom_format)
