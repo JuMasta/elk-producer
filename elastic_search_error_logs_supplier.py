@@ -24,8 +24,7 @@ BODY = { "query": {
     "bool": {
       "should" : [
         { "term" : { "level.keyword" : "error" } },
-        { "term" : { "level.keyword" : "warn" } },
-        { "term" : { "level.keyword" : "warning" } }
+        { "term" : { "level.keyword" : "warn" } }
       ],
       "filter": [
         {"range": {
