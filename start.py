@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 args = {}
+period = 10
 log.info(sys.argv)
 if len(sys.argv) > 1:
     for i in range(len(sys.argv)):
@@ -17,9 +18,10 @@ if len(sys.argv) > 1:
             key = key_value_array[0]
             value = key_value_array[1]
             args[key] = value
+    period = int(args['period'])
 
 
-period = int(args['period'])
+
 
 while True:
     try:
