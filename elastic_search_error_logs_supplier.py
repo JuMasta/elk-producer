@@ -42,6 +42,7 @@ BODY = { "query": {
 
 
 def create_custom_format(hits):
+    log.warn(hits)
     hits_custom_format = list(map(lambda x :  { ID_KEY:x['_id'], NAMESPACE_KEY : x['_source']['kubernetes']['namespace_name'] , POD_NAME_KEY: x['_source']['kubernetes']['pod_name'] , LEVEL_KEY : x['_source']['level']}, hits ))
     return hits_custom_format
 
@@ -81,7 +82,6 @@ def get_new_errors_and_send_to_exporter():
     hits = es_query_response['hits']['hits']
     # log.warn('Длина: ' + str(len(hits)))
     hits_custom_format = create_custom_format(hits)
-    log.warn(hits_custom_format)
     filter_sended_hits(hits_custom_format)
     send_metrics_to_exporter(hits_for_sending)
     hits_sended_errors.clear()
