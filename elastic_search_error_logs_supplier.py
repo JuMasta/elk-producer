@@ -54,7 +54,7 @@ def send_metrics_to_exporter(hits_for_sending):
     data_json = {
         'namespace_names': {}
     }
-
+    log.info(hits_for_sending)
     for item in hits_for_sending:
         namespace_name = item[NAMESPACE_KEY]
         pod_name = item[POD_NAME_KEY]
