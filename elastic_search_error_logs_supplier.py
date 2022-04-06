@@ -63,6 +63,7 @@ def send_metrics_to_exporter(hits_for_sending):
         namespace_object = data_json['namespace_names'][namespace_name]
         pod_object = namespace_object.get(pod_name, {})
         pod_object[level_name] = pod_object.get(level_name,0) + 1
+        namespace_object[pod_name] = pod_object[level_name]
 
     log.info(data_json)
     requests.post(EXPORTER_URL,json=data_json)
