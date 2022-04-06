@@ -65,7 +65,7 @@ def send_metrics_to_exporter(hits_for_sending):
         namespace_object[pod_name] = pod_object
         pod_object[level_name] = pod_object.get(level_name, 0) + 1
 
-    log.warn(data_json)
+    # log.warn(data_json)
     requests.post(EXPORTER_URL,json=data_json)
 
 
@@ -79,8 +79,9 @@ def get_new_errors_and_send_to_exporter():
     global hits_for_sending
     es_query_response = es.search(index="logstash-*",body=BODY, size=10000)
     hits = es_query_response['hits']['hits']
-    log.warn('Длина: ' + str(len(hits)))
+    # log.warn('Длина: ' + str(len(hits)))
     hits_custom_format = create_custom_format(hits)
+    log.warn(hits_custom_format)
     filter_sended_hits(hits_custom_format)
     send_metrics_to_exporter(hits_for_sending)
     hits_sended_errors.clear()
