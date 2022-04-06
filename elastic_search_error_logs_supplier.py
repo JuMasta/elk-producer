@@ -23,8 +23,8 @@ ID_KEY = '_id'
 BODY = { "query": {
     "bool": {
       "should" : [
-        { "term" : { "level" : "error" } },
-        { "term" : { "level" : "warn" } }
+        { "term" : { "level.keyword" : "error" } },
+        { "term" : { "level.keyword" : "warn" } }
       ],
       "filter": [
         {"range": {
@@ -54,7 +54,7 @@ def send_metrics_to_exporter(hits_for_sending):
     data_json = {
         'namespace_names': {}
     }
-    # hits_for_sending = [{'_id': 'pE3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'pk3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'q03q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'rU3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': '1hnp_38Be8fj5AqrluSA', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-operator-0', 'level': 'error'}, {'_id': 'WBnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'WRnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'Uhnq_38Be8fj5AqrP-aD', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-operator-5f75d76f9f-v7rr7', 'level': 'warn'}, {'_id': 'M03q_38BKpjbM2ZMYh1p', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}, {'_id': 't03r_38BKpjbM2ZMnB6l', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}]
+    # hits_for_sending = [{'_id': 'pE3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'},{'_id': 'pE3q_38BKpjbM2ZMLxvO2', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'warn'}, {'_id': 'pk3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'q03q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'rU3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': '1hnp_38Be8fj5AqrluSA', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-operator-0', 'level': 'error'}, {'_id': 'WBnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'WRnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'Uhnq_38Be8fj5AqrP-aD', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-operator-5f75d76f9f-v7rr7', 'level': 'warn'}, {'_id': 'M03q_38BKpjbM2ZMYh1p', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}, {'_id': 't03r_38BKpjbM2ZMnB6l', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}]
     for item in hits_for_sending:
         namespace_name = item[NAMESPACE_KEY]
         pod_name = item[POD_NAME_KEY]
