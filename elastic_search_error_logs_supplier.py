@@ -54,7 +54,7 @@ def send_metrics_to_exporter(hits_for_sending):
     data_json = {
         'namespace_names': {}
     }
-    log.info(hits_for_sending)
+    # hits_for_sending = [{'_id': 'pE3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'pk3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'q03q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': 'rU3q_38BKpjbM2ZMLxvO', 'namespace_name': 'argocd', 'pod_name': 'argocd-repo-server-75ff6886fb-w7jln', 'level': 'error'}, {'_id': '1hnp_38Be8fj5AqrluSA', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-operator-0', 'level': 'error'}, {'_id': 'WBnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'WRnq_38Be8fj5AqrWOad', 'namespace_name': 'elastic-system', 'pod_name': 'elastic-exporter-69cf6b64d5-56flc', 'level': 'error'}, {'_id': 'Uhnq_38Be8fj5AqrP-aD', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-operator-5f75d76f9f-v7rr7', 'level': 'warn'}, {'_id': 'M03q_38BKpjbM2ZMYh1p', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}, {'_id': 't03r_38BKpjbM2ZMnB6l', 'namespace_name': 'monitoring', 'pod_name': 'prometheus-k8s-0', 'level': 'warn'}]
     for item in hits_for_sending:
         namespace_name = item[NAMESPACE_KEY]
         pod_name = item[POD_NAME_KEY]
@@ -62,10 +62,10 @@ def send_metrics_to_exporter(hits_for_sending):
         data_json['namespace_names'][namespace_name] = data_json['namespace_names'].get(namespace_name,{})
         namespace_object = data_json['namespace_names'][namespace_name]
         pod_object = namespace_object.get(pod_name, {})
-        pod_object[level_name] = pod_object.get(level_name,0) + 1
-        namespace_object[pod_name] = pod_object[level_name]
+        namespace_object[pod_name] = pod_object
+        pod_object[level_name] = pod_object.get(level_name, 0) + 1
 
-    log.info(data_json)
+    log.warn(data_json)
     requests.post(EXPORTER_URL,json=data_json)
 
 
@@ -85,14 +85,3 @@ def get_new_errors_and_send_to_exporter():
     hits_sended_errors.clear()
     hits_sended_errors = update_sended_errors(hits_sended_errors, hits_custom_format)
     hits_for_sending = []
-
-
-
-{'namespace_names': {
-    "elastic_system": {
-    "pod_name": {
-        "warn": 1,
-        "error" : 2
-    }
-    }
-}}

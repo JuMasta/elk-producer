@@ -4,7 +4,7 @@ import sys
 import logging
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 
 args = {}
