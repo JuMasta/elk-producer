@@ -80,7 +80,7 @@ def get_new_errors_and_send_to_exporter():
     global hits_for_sending
     es_query_response = es.search(index="logstash-*",body=BODY, size=10000)
     hits = es_query_response['hits']['hits']
-    log.warn('Длина: ' ,len(hits))
+    log.warn('Длина: ' + str(len(hits)))
     hits_custom_format = create_custom_format(hits)
     filter_sended_hits(hits_custom_format)
     send_metrics_to_exporter(hits_for_sending)
