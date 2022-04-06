@@ -20,14 +20,13 @@ ID_KEY = '_id'
 
 
 BODY = {
-  "query": {
+{ "query": {
     "bool": {
+      "should" : [
+        { "term" : { "level" : "error" } },
+        { "term" : { "level" : "warn" } }
+      ],
       "filter": [
-        {
-          "term": {
-            "level": "error"
-          }
-        },
         {"range": {
           "@timestamp": {
             "gte": "now-5m",
