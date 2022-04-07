@@ -24,7 +24,8 @@ BODY = { "query": {
     "bool": {
       "should" : [
         { "term" : { "level.keyword" : "error" } },
-        { "term" : { "level.keyword" : "warn" } }
+        { "term" : { "level.keyword" : "warn" } },
+        { "term" : { "level.keyword" : "warning" } }
       ],
       "filter": [
         {"range": {
@@ -42,7 +43,6 @@ BODY = { "query": {
 
 
 def create_custom_format(hits):
-    log.warn(hits)
     hits_custom_format = list(map(lambda x :  { ID_KEY:x['_id'], NAMESPACE_KEY : x['_source']['kubernetes']['namespace_name'] , POD_NAME_KEY: x['_source']['kubernetes']['pod_name'] , LEVEL_KEY : x['_source']['level']}, hits ))
     return hits_custom_format
 
@@ -66,7 +66,7 @@ def send_metrics_to_exporter(hits_for_sending):
         namespace_object[pod_name] = pod_object
         pod_object[level_name] = pod_object.get(level_name, 0) + 1
 
-    # log.warn(data_json)
+    log.warn(data_json)
     requests.post(EXPORTER_URL,json=data_json)
 
 
@@ -78,7 +78,7 @@ def update_sended_errors(sended_errors, hits_custom_format):
 def get_new_errors_and_send_to_exporter():
     global hits_sended_errors
     global hits_for_sending
-    es_query_response = es.search(index="logstash-*",body=BODY, size=10)
+    es_query_response = es.search(index="logstash-*",body=BODY, size=5000)
     hits = es_query_response['hits']['hits']
     # log.warn('Длина: ' + str(len(hits)))
     hits_custom_format = create_custom_format(hits)
