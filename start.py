@@ -2,6 +2,7 @@ from elastic_search_error_logs_supplier import get_new_errors_and_send_to_export
 import time
 import sys
 import logging
+from datetime import datetime
 
 log = logging.getLogger(__name__)
 # logging.basicConfig(level=logging.INFO)
