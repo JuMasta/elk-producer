@@ -107,7 +107,7 @@ def send_metrics_to_exporter(hits_for_sending):
         pod_object[level_name] = pod_object.get(level_name, 0) + 1
 
     log.warn(data_json)
-    requests.post(EXPORTER_URL,json=data_json)
+    requests.post(EXPORTER_URL + '/metric-reciever',json=data_json)
 
 
 def update_sended_errors(sended_errors, hits_custom_format):
@@ -126,3 +126,7 @@ def get_new_errors_and_send_to_exporter():
     hits_sended_errors.clear()
     hits_sended_errors = update_sended_errors(hits_sended_errors, hits_custom_format)
     hits_for_sending = []
+
+
+def clean_metrics():
+    requests.post(EXPORTER_URL + '/clean-metrics')

@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 
 args = {}
-period = 10
+period = 60
 log.info(sys.argv)
 if len(sys.argv) > 1:
     for i in range(len(sys.argv)):
@@ -24,6 +24,10 @@ if len(sys.argv) > 1:
 
 
 while True:
+
+    now = datetime.now()
+    if now.hour == 00 and now.minute == 00:
+        clean_metrics()
     try:
         get_new_errors_and_send_to_exporter()
     except Exception as e:
